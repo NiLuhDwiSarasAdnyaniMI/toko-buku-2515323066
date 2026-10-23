@@ -9,7 +9,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/buku', [BookController::class, 'index']);
+Route::resource('buku', BookController::class)->except(['show']);
 Route::get('/buku/{id}', [BookController::class, 'show']);
 
 Route::resource('kategori', CategoryController::class)->except('show');
