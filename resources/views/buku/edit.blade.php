@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ubah Buku - BookStore</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="{{ url('/buku') }}">BookStore</a>
+    </div>
+</nav>
+
+<div class="container py-5">
+    <div class="card shadow-sm mx-auto" style="max-width: 700px;">
+        <div class="card-body p-4">
+            <h1 class="mb-4">Ubah Buku</h1>
+
+            <form action="{{ route('buku.update', $buku->id) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+
+                <div class="mb-3">
+                    <label for="title" class="form-label">Judul Buku</label>
+                    <input type="text" id="title" name="title"
+                        class="form-control @error('title') is-invalid @enderror"
+                        value="{{ old('title', $buku->title) }}">
+                    @error('title')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="author_name" class="form-label">Nama Penulis</label>
+                    <input type="text" id="author_name" name="author_name"
+                        class="form-control @error('author_name') is-invalid @enderror"
+                        value="{{ old('author_name', $buku->author_name) }}">
+                    @error('author_name')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="category_id" class="form-label">Kategori</label>
+                    <select id="category_id" name="category_id"
+                        class="form-select @error('category_id') is-invalid @enderror">
+                        <option value="">Pilih Kategori</option>
+                        @foreach ($daftarKategori as $kategori)
+                            <option value="{{ $kategori->id }}"
+                                {{ old('category_id', $buku->category_id) == $kategori->id ? 'selected' : '' }}>
+                                {{ $kategori->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('category_id')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="publisher_id" class="form-label">Penerbit</label>
+                    <select id="publisher_id" name="publisher_id"
+                        class="form-select @error('publisher_id') is-invalid @enderror">
+                        <option value="">Pilih Penerbit</option>
+                        @foreach ($daftarPenerbit as $penerbit)
+                            <option value="{{ $penerbit->id }}"
+                                {{ old('publisher_id', $buku->publisher_id) == $penerbit->id ? 'selected' : '' }}>
+                                {{ $penerbit->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('publisher_id')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="price" class="form-label">Harga (Rp)</label>
+                    <input type="text" id="price" name="price"
+                        class="form-control @error('price') is-invalid @enderror"
+                        value="{{ old('price', (int) $buku->price) }}">
+                    <div class="form-text">Ketik angka saja, tanpa titik atau koma (contoh: 85000).</div>
+                    @error('price')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="stock" class="form-label">Stok</label>
+                    <input type="text" id="stock" name="stock"
+                        class="form-control @error('stock') is-invalid @enderror"
+                        value="{{ old('stock', $buku->stock) }}">
+                    @error('stock')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="published_year" class="form-label">Tahun Terbit (opsional)</label>
+                    <input type="text" id="published_year" name="published_year"
+                        class="form-control @error('published_year') is-invalid @enderror"
+                        value="{{ old('published_year', $buku->published_year) }}">
+                    @error('published_year')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="cover" class="form-label">Sampul (opsional, JPG/PNG, maksimal 2 MB)</label>
+                    @if ($buku->cover)
+                        <div class="mb-2">
+                            <img src="{{ asset('storage/' . $buku->cover) }}" alt="Sampul {{ $buku->title }}" style="max-height: 120px;">
+                        </div>
+                    @endif
+                    <input type="file" id="cover" name="cover"
+                        class="form-control @error('cover') is-invalid @enderror">
+                    <div class="form-text">Kosongkan bila tidak ingin mengganti sampul.</div>
+                    @error('cover')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                <a href="{{ url('/buku') }}" class="btn btn-secondary">Batal</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
